@@ -1,14 +1,14 @@
 <template>
   <div class="gallery">
-    <pre>detail index:{{ detailIndex }}</pre>
+    <!-- <pre>detail index:{{ detailIndex }}</pre> -->
     <!-- <pre>selected img: {{ selectedImage }}</pre> -->
     <h1>{{ results.length }}/ {{ metadata.length }}</h1>
     <div class="results">
-      <div class="result" v-for="(item, index) in results" :key="item.name">
+      <div class="result" v-for="item in results" :key="item.name">
         <div v-if="mode == 'gallery' || mode == 'gallery-list'">
           <!-- TODO: make src path configurable -->
           <img
-            @click="selectionHandler(item, index)"
+            @click="selectionHandler(item, item.edition)"
             :data-token="item"
             :src="require(`#BUILD/images/${item.edition}.${imageType}`)"
             alt=""

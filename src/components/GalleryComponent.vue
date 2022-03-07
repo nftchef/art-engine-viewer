@@ -1,7 +1,7 @@
 <template>
   <div class="gallery">
     <!-- <pre>detail index:{{ detailIndex }}</pre> -->
-    <!-- <pre>selected img: {{ selectedImage }}</pre> -->
+    <!-- <pre>selected img: {{ selectedToken }}</pre> -->
     <h1>{{ results.length }}/ {{ metadata.length }}</h1>
     <div class="results">
       <div class="result" v-for="item in results" :key="item.name">
@@ -24,13 +24,13 @@
     <!-- <pre>{{ type }}</pre> -->
   </div>
 
-  <div v-if="selectedImage" v-show="modalOpen" class="modal">
-    <!-- {{ selectedImage }} -->
+  <div v-if="selectedToken" v-show="modalOpen" class="modal">
+    <!-- {{ selectedToken }} -->
     <div class="metadata">
-      <h1>{{ selectedImage.name }}</h1>
+      <h1>{{ selectedToken.name }}</h1>
       <div class="attributes">
         <div
-          v-for="attribute in selectedImage.attributes"
+          v-for="attribute in selectedToken.attributes"
           class="attribute"
           :key="attribute.trait_type"
         >
@@ -40,7 +40,7 @@
       </div>
     </div>
     <img
-      :src="require(`#BUILD/images/${selectedImage.edition}.${imageType}`)"
+      :src="require(`#BUILD/images/${selectedToken.edition}.${imageType}`)"
       alt=""
       srcset=""
     />
@@ -62,9 +62,12 @@ export default {
     const results = computed(() => store.state.results);
 
     const detailIndex = computed(() => store.state.currentDetailIndex);
-    const selectedImage = ref(null);
+    const selectedToken = ref(null);
     watch(detailIndex, (index) => {
-      selectedImage.value = metadata.value[index];
+      console.log("setting selected");
+      selectedToken.value = metadata.value.find(
+        (element) => element.edition == index
+      );
     });
 
     const imageType = process.env.VUE_APP_IMAGE_TYPE;
@@ -80,14 +83,15 @@ export default {
       imageType,
       modalOpen,
       detailIndex,
-      selectedImage,
-      selectionHandler: selectionHandler(store, selectedImage, modalOpen),
+      selectedToken,
+      selectionHandler: selectionHandler(store, selectedToken, modalOpen),
     };
   },
 };
 
-const selectionHandler = (store, selected, modalOpen) => (item, index) => {
+const selectionHandler = (store, selected, modalOpen) => (elem, index) => {
   store.dispatch("CURRENT_DETAIL_INDEX", index);
+  console.log("selection handler", { index });
   modalOpen.value = !modalOpen.value;
 
   toggleKeyHandler(store, modalOpen);

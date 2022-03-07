@@ -66,6 +66,7 @@ const filterHandler = (_store) => (e) => {
 <style lang="scss" scoped>
 .filters {
   margin-right: 2rem;
+  min-width: 200px;
 }
 
 .filter {

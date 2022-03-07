@@ -1,6 +1,8 @@
 <template>
-  <filter-aside />
-  <gallery-component :sources="[]" :type="imageType" />
+  <div class="explorer">
+    <filter-aside />
+    <gallery-component />
+  </div>
 </template>
 
 <script>
@@ -48,11 +50,17 @@ export default {
   text-align: left;
   color: #363636;
   margin-top: 60px;
+  width: 100vw;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+.explorer {
+  display: flex;
+  margin: 0 2rem;
 }
 </style>

@@ -7,11 +7,15 @@ export default createStore({
     results: [],
     allTraits: [],
     traitTypes: [],
+    currentDetailIndex: 0,
   },
   getters: {},
   mutations: {
     SET_RESULTS(state, _results) {
       state.results = _results;
+    },
+    SET_FILTERS(state, _filters) {
+      state.filters = _filters;
     },
     SET_METADATA(state, _metadata) {
       state.metadata = _metadata;
@@ -22,11 +26,16 @@ export default createStore({
     SET_TRAIT_TYPES(state, _traits) {
       state.traitTypes = _traits;
     },
+    SET_CURRENT_INDEX(state, _index) {
+      state.currentDetailIndex = _index;
+    },
   },
   actions: {
     INITIALIZE_TRAITS({ commit }, metadata) {
       console.log("init traits,", metadata);
       commit("SET_METADATA", metadata);
+      commit("SET_RESULTS", metadata);
+
       const allTraits = metadata.reduce((acc, item) => {
         // loop over each item in the entire metadata. this could be
         // time intensive.
@@ -68,6 +77,55 @@ export default createStore({
       });
 
       commit("SET_RESULTS", subset);
+    },
+
+    ADD_FILTER({ commit, dispatch, state }, filter) {
+      const filters = [...state.filters, filter];
+
+      commit("SET_FILTERS", filters);
+      dispatch("FILTER");
+    },
+
+    REMOVE_FILTER({ commit, dispatch, state }, traitFilter) {
+      const filters = state.filters.filter(
+        (trait) =>
+          trait.trait_type !== traitFilter.trait_type &&
+          trait.value !== traitFilter.value
+      );
+
+      commit("SET_FILTERS", filters);
+      dispatch("FILTER");
+    },
+
+    FILTER({ commit, state }) {
+      if (!state.filters.length || state.filters.length === 0) {
+        // clear all filter results and show all
+        commit("SET_RESULTS", state.metadata);
+        return;
+      }
+      const results = state.metadata.filter((item) => {
+        // if the items attributes match any of the filters, return true
+        const matches = item.attributes.filter((attribute) => {
+          // eslint-disable-next-line
+          // debugger;
+          // TODO: currently treats all filters as "OR"
+          // should ad; a "drill down", "AND" functionality/mode
+          return state.filters.some((f) => {
+            return (
+              f.trait_type === attribute.trait_type &&
+              f.value === attribute.value
+            );
+          });
+        });
+        return matches.length > 0;
+      });
+      console.log({ results });
+      commit("SET_RESULTS", results);
+    },
+
+    // Set the metadata array index of the current selected item
+    CURRENT_DETAIL_INDEX({ commit }, _index) {
+      commit("SET_CURRENT_INDEX", _index);
     },
   },
   modules: {},

@@ -9,7 +9,15 @@
           v-for="attribute in Object.keys(allTraits[type])"
           :key="attribute"
         >
-          <input type="checkbox" :name="attribute" :id="attribute" />
+          <input
+            class="filter__checkbox"
+            type="checkbox"
+            @change="filterHandler"
+            :data-trait-type="type"
+            :data-trait-attribute="attribute"
+            :name="attribute"
+            :id="attribute"
+          />
           <label :for="attribute"
             >{{ attribute }}
             <span class="filter__attribute-count"
@@ -32,12 +40,34 @@ export default {
     const store = useStore();
     const allTraits = computed(() => store.state.allTraits);
     const traitTypes = computed(() => store.state.traitTypes);
-    return { traitTypes, allTraits };
+    return { traitTypes, allTraits, filterHandler: filterHandler(store) };
   },
+};
+
+const filterHandler = (_store) => (e) => {
+  const store = _store;
+
+  if (e.target.checked) {
+    // add
+    store.dispatch("ADD_FILTER", {
+      trait_type: e.target.dataset.traitType,
+      value: e.target.dataset.traitAttribute,
+    });
+  } else {
+    // remove
+    store.dispatch("REMOVE_FILTER", {
+      trait_type: e.target.dataset.traitType,
+      value: e.target.dataset.traitAttribute,
+    });
+  }
 };
 </script>
 
 <style lang="scss" scoped>
+.filters {
+  margin-right: 2rem;
+}
+
 .filter {
   &__list {
     margin-bottom: 1rem;
@@ -48,6 +78,10 @@ export default {
   }
   &__attribute {
     list-style: none;
+  }
+
+  &__checkbox {
+    margin-right: 0.25rem;
   }
 
   &__attribute-count {

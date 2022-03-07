@@ -1,12 +1,20 @@
 # 🧪 Art Engine Explorer (alpha)
 A local web app intended to be used in conjunction with the Art-Engine. This is a quick (desktop) viewer that allows you to visualize and 
 
-<img width="1695" alt="image" src="https://user-images.githubusercontent.com/91582112/156967994-270b5c19-8468-4abf-9ec4-2fc11e2c03d9.png">
-<img width="1681" alt="image" src="https://user-images.githubusercontent.com/91582112/156968122-fa7d1d6a-eefa-41ab-8037-49df6491ac07.png">
+<img width="1362" alt="image" src="https://user-images.githubusercontent.com/91582112/157121649-14523004-4279-4c6b-9949-ebaa7d435eb4.png">
+<img width="1365" alt="image" src="https://user-images.githubusercontent.com/91582112/157121771-a09db140-b63c-4cd6-a310-60f15375b018.png">
+
+# Controls
+Use `arrow keys` to scroll through items when the detail modal or fullscreen modes are open
+Use `Escape` to close teh detail modal or Fullscreen mode
 
 ## Roadmap
-[] In
-## Project setup
+[] Add rarity calculations
+[] Add "jump to number" input 
+[] Integrate into the main art-engine repo as a submodule
+[] Properly configure the config.js file to allow for custom paths to the build dir
+
+# Project setup
 **⚠️ Important!!**
 - As of this writing, this repo should be installed _next_ to the Art Engine folder so the _Viewer_ project can easily the `build` folders from the Art Engine generator. 
 - As of this writing, the viewer relies on the `.edition` metadata property for indexing images.

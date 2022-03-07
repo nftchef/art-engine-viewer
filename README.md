@@ -4,7 +4,8 @@ A local web app intended to be used in conjunction with the Art-Engine. This is 
 <img width="1695" alt="image" src="https://user-images.githubusercontent.com/91582112/156967994-270b5c19-8468-4abf-9ec4-2fc11e2c03d9.png">
 <img width="1681" alt="image" src="https://user-images.githubusercontent.com/91582112/156968122-fa7d1d6a-eefa-41ab-8037-49df6491ac07.png">
 
-
+## Roadmap
+[] In
 ## Project setup
 **⚠️ Important!!**
 - As of this writing, this repo should be installed _next_ to the Art Engine folder so the _Viewer_ project can easily the `build` folders from the Art Engine generator. 

@@ -1,4 +1,4 @@
-# Art Engine Explorer
+# 🧪 Art Engine Explorer (alpha)
 A local web app intended to be used in conjunction with the Art-Engine. This is a quick (desktop) viewer that allows you to visualize and 
 
 <img width="1695" alt="image" src="https://user-images.githubusercontent.com/91582112/156967994-270b5c19-8468-4abf-9ec4-2fc11e2c03d9.png">
@@ -13,7 +13,8 @@ A local web app intended to be used in conjunction with the Art-Engine. This is 
 
 
 Clone or Download this project _next to_ the generator folder.
-[To adjust the path of the build folder, see config.js in _this_project]
+This build expects the art-engine folder to be named `Art Engine` 
+[To adjust the path of the build folder, see vue.config.js AND App.vue in_this_project]
 
 If you are building JPEG images, change the config in `config.js` in the viewer config file.
 

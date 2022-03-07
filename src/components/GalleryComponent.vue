@@ -3,6 +3,7 @@
     <!-- <pre>detail index:{{ detailIndex }}</pre> -->
     <!-- <pre>selected img: {{ selectedToken }}</pre> -->
     <h1>{{ results.length }}/ {{ metadata.length }}</h1>
+    <active-filters />
     <div class="results">
       <div class="result" v-for="item in results" :key="item.name">
         <div v-if="mode == 'gallery' || mode == 'gallery-list'">
@@ -24,9 +25,27 @@
     <!-- <pre>{{ type }}</pre> -->
   </div>
 
-  <div v-if="selectedToken" v-show="modalOpen" class="modal">
+  <div
+    v-if="selectedToken"
+    v-show="modalOpen"
+    :class="{ modal: true, fullscreen }"
+  >
     <!-- {{ selectedToken }} -->
-    <div class="metadata">
+    <button @click="toggleFullscreen" class="fullscreen-toggle">
+      <!-- Fullscreen toggle -->
+      <img
+        v-if="!fullscreen"
+        src="@/assets/icon-fullscreen-open.svg"
+        alt=""
+        srcset=""
+      />
+      <img v-else src="@/assets/icon-fullscreen-close.svg" alt="" srcset="" />
+    </button>
+    <!-- Close modal -->
+    <button class="close" @click="toggleModal">
+      <img src="@/assets/icon-close.svg" alt="" srcset="" />
+    </button>
+    <div v-if="!fullscreen" class="metadata">
       <h1>{{ selectedToken.name }}</h1>
       <div class="attributes">
         <div
@@ -51,15 +70,19 @@
 <script>
 import { computed, ref, watch } from "@vue/runtime-core";
 import { useStore } from "vuex";
+import ActiveFilters from "./ActiveFilters.vue";
 
 const handlers = {};
 export default {
+  components: { ActiveFilters },
   setup() {
     const store = useStore();
 
     const allTraits = computed(() => store.state.allTraits);
     const metadata = computed(() => store.state.metadata);
     const results = computed(() => store.state.results);
+
+    const fullscreen = ref(false);
 
     const detailIndex = computed(() => store.state.currentDetailIndex);
     const selectedToken = ref(null);
@@ -82,7 +105,10 @@ export default {
       results,
       imageType,
       modalOpen,
+      fullscreen,
       detailIndex,
+      toggleModal: () => (modalOpen.value = !modalOpen.value),
+      toggleFullscreen: toggleFullscreen(fullscreen),
       selectedToken,
       selectionHandler: selectionHandler(store, selectedToken, modalOpen),
     };
@@ -113,6 +139,7 @@ const toggleKeyHandler = (store, modalOpen) => {
 const keyPressHandler = (store, modalOpen) => (e) => {
   const index = store.state.currentDetailIndex;
   const max = store.state.metadata.length;
+  const min = store.state.metadata[0].edition;
   switch (e.key) {
     case "Escape":
       modalOpen.value = false;
@@ -132,13 +159,13 @@ const keyPressHandler = (store, modalOpen) => (e) => {
       break;
     case "ArrowLeft":
       e.preventDefault();
-      if (index - 1 >= 0) {
+      if (index - 1 >= min) {
         store.dispatch("CURRENT_DETAIL_INDEX", index - 1);
       }
       break;
     case "ArrowDown":
       e.preventDefault();
-      if (index - 1 >= 0) {
+      if (index - 1 >= min) {
         store.dispatch("CURRENT_DETAIL_INDEX", index - 1);
       }
       break;
@@ -146,6 +173,10 @@ const keyPressHandler = (store, modalOpen) => (e) => {
     default:
       break;
   }
+};
+
+const toggleFullscreen = (fullscreenState) => () => {
+  fullscreenState.value = !fullscreenState.value;
 };
 </script>
 
@@ -199,6 +230,13 @@ const keyPressHandler = (store, modalOpen) => (e) => {
   border-radius: 0.6rem;
   overflow: hidden;
   z-index: 10;
+
+  &.fullscreen {
+    height: 99vh;
+    width: 99vw;
+    justify-content: center;
+  }
+
   .metadata {
     flex-basis: 50%;
     padding: 2rem;
@@ -221,6 +259,27 @@ const keyPressHandler = (store, modalOpen) => (e) => {
       &__value {
         font-size: 1.1em;
       }
+    }
+  }
+
+  button {
+    position: absolute;
+    background: none;
+    border: none;
+    opacity: 50%;
+
+    &.fullscreen-toggle {
+      right: 0;
+      top: 0;
+    }
+
+    &.close {
+      left: 0;
+      top: 0;
+    }
+
+    &:hover {
+      cursor: pointer;
     }
   }
 }

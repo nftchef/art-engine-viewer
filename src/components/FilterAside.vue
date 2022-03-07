@@ -1,7 +1,7 @@
 <template>
   <aside class="filters">
     <h1>Filter</h1>
-    <div v-for="type in traitTypes" :key="type">
+    <div v-for="type in Object.keys(allTraits)" :key="type">
       <label for="" class="filter__type">{{ type }}</label>
       <ul class="filter__list">
         <li
@@ -12,7 +12,8 @@
           <input
             class="filter__checkbox"
             type="checkbox"
-            @change="filterHandler"
+            @change="filterHandler($event, allTraits[type][attribute])"
+            :checked="allTraits[type][attribute].filterState"
             :data-trait-type="type"
             :data-trait-attribute="attribute"
             :name="attribute"
@@ -44,10 +45,11 @@ export default {
   },
 };
 
-const filterHandler = (_store) => (e) => {
+const filterHandler = (_store) => (e, trait) => {
   const store = _store;
+  console.log("FilterHandler", { trait });
 
-  if (e.target.checked) {
+  if (!trait.filterState) {
     // add
     store.dispatch("ADD_FILTER", {
       trait_type: e.target.dataset.traitType,
@@ -67,6 +69,12 @@ const filterHandler = (_store) => (e) => {
 .filters {
   margin-right: 2rem;
   min-width: 200px;
+
+  h1 {
+    font-weight: bolder;
+    text-transform: uppercase;
+    font-size: 2em;
+  }
 }
 
 .filter {

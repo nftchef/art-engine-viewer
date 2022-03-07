@@ -46,6 +46,7 @@ export default createStore({
           acc[attribute.trait_type] = {
             ...acc[attribute.trait_type],
             [attribute.value]: {
+              filterState: false,
               count: acc[attribute.trait_type]
                 ? acc[attribute.trait_type][attribute.value]
                   ? acc[attribute.trait_type][attribute.value].count + 1
@@ -80,8 +81,13 @@ export default createStore({
     },
 
     ADD_FILTER({ commit, dispatch, state }, filter) {
-      const filters = [...state.filters, filter];
+      const filters = [...state.filters, { ...filter, filterState: true }];
+      const updateState = {
+        ...state.allTraits,
+      };
+      updateState[filter.trait_type][filter.value].filterState = true;
 
+      commit("SET_TRAITS", updateState);
       commit("SET_FILTERS", filters);
       dispatch("FILTER");
     },
@@ -92,7 +98,13 @@ export default createStore({
           trait.trait_type !== traitFilter.trait_type &&
           trait.value !== traitFilter.value
       );
-
+      const updateState = {
+        ...state.allTraits,
+      };
+      updateState[traitFilter.trait_type][
+        traitFilter.value
+      ].filterState = false;
+      commit("SET_TRAITS", updateState);
       commit("SET_FILTERS", filters);
       dispatch("FILTER");
     },

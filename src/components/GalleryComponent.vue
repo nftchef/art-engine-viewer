@@ -3,6 +3,7 @@
     <!-- <pre>detail index:{{ detailIndex }}</pre> -->
     <!-- <pre>selected img: {{ selectedToken }}</pre> -->
     <h1>{{ results.length }}/ {{ metadata.length }}</h1>
+
     <active-filters />
     <div class="results">
       <div class="result" v-for="item in results" :key="item.name">
@@ -210,14 +211,14 @@ const toggleFullscreen = (fullscreenState) => () => {
   top: 0;
   left: 0;
   position: fixed;
-  background: white;
+  background: var(--backrgound);
   opacity: 0.65;
   z-index: 9;
 }
 .modal {
   display: flex;
   position: fixed;
-  background: white;
+  background: var(--background);
   justify-content: space-between;
   top: 0;
   left: 0;

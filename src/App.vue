@@ -1,7 +1,10 @@
 <template>
-  <div class="explorer">
-    <filter-aside />
-    <gallery-component />
+  <div :class="{ app: true, darkmode }">
+    <darkmode-toggle />
+    <div class="explorer">
+      <filter-aside />
+      <gallery-component />
+    </div>
   </div>
 </template>
 
@@ -18,22 +21,27 @@ import GalleryComponent from "@/components/GalleryComponent.vue";
 //                             |
 //                             v
 import metadata from "../../Art Engine/build/json/_metadata.json";
+import { computed } from "@vue/runtime-core";
+import DarkmodeToggle from "./components/DarkmodeToggle.vue";
 
 export default {
   name: "App",
   components: {
     GalleryComponent,
     FilterAside,
+    DarkmodeToggle,
   },
   setup() {
     const store = useStore();
 
     store.dispatch("INITIALIZE_TRAITS", metadata);
+    const darkmode = computed(() => store.state.darkmode);
 
     return {
       // traitTypes,
       GalleryComponent,
       imageType,
+      darkmode,
       // buildLoaded,
       // allTraits,
       metadata,
@@ -48,9 +56,20 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
-  color: #363636;
-  margin-top: 60px;
   width: 100vw;
+}
+
+.app {
+  --background: white;
+
+  padding: 2em;
+
+  &.darkmode {
+    --background: #222;
+    --color: #e5e5e5;
+  }
+  background: var(--background);
+  color: var(--color);
 }
 
 * {
@@ -61,6 +80,6 @@ export default {
 
 .explorer {
   display: flex;
-  margin: 0 2rem;
+  padding: 2rem;
 }
 </style>

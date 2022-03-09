@@ -8,6 +8,7 @@ export default createStore({
     allTraits: [],
     traitTypes: [],
     currentDetailIndex: 0,
+    darkmode: false,
   },
   getters: {},
   mutations: {
@@ -28,6 +29,9 @@ export default createStore({
     },
     SET_CURRENT_INDEX(state, _index) {
       state.currentDetailIndex = _index;
+    },
+    SET_DARKMODE(state, _on) {
+      state.darkmode = _on;
     },
   },
   actions: {
@@ -166,6 +170,10 @@ export default createStore({
     // Set the metadata array index of the current selected item
     CURRENT_DETAIL_INDEX({ commit }, _index) {
       commit("SET_CURRENT_INDEX", _index);
+    },
+
+    TOGGLE_DARK_MODE({ commit, state }) {
+      commit("SET_DARKMODE", !state.darkmode);
     },
   },
   modules: {},

@@ -62,6 +62,32 @@ export default createStore({
       commit("SET_TRAIT_TYPES", traitTypes);
       commit("SET_TRAITS", allTraits);
     },
+
+    SET_AVAILABLE_ATTRIBUTES({ commit, state }) {
+      const allTraits = state.results.reduce((acc, item) => {
+        // loop over each item in the entire metadata. this could be
+        // time intensive.
+        // Initialize the trait if it has not been initialized yet in the acc
+        // initialize the value at count 1 it it has not been init yet
+        // sum al the counts
+        item.attributes.forEach((attribute) => {
+          acc[attribute.trait_type] = {
+            ...acc[attribute.trait_type],
+            [attribute.value]: {
+              filterState: false,
+              count: acc[attribute.trait_type]
+                ? acc[attribute.trait_type][attribute.value]
+                  ? acc[attribute.trait_type][attribute.value].count + 1
+                  : 1
+                : 1,
+            },
+          };
+        });
+        return acc;
+      }, {});
+
+      commit("SET_TRAITS", allTraits);
+    },
     /**
      *
      * @param {context} param0 Unwraped context params for commit,state
@@ -107,32 +133,34 @@ export default createStore({
       commit("SET_TRAITS", updateState);
       commit("SET_FILTERS", filters);
       dispatch("FILTER");
+      dispatch("SET_AVAILABLE_ATTRIBUTES");
     },
 
-    FILTER({ commit, state }) {
+    FILTER({ commit, state, dispatch }) {
       if (!state.filters.length || state.filters.length === 0) {
         // clear all filter results and show all
         commit("SET_RESULTS", state.metadata);
         return;
       }
+
+      // console.log("active filters", state.filters);
+
       const results = state.metadata.filter((item) => {
-        // if the items attributes match any of the filters, return true
-        const matches = item.attributes.filter((attribute) => {
-          // eslint-disable-next-line
-          // debugger;
-          // TODO: currently treats all filters as "OR"
-          // should ad; a "drill down", "AND" functionality/mode
-          return state.filters.some((f) => {
+        return state.filters.every((filter) => {
+          // if the items attributes match any of the filters, return true
+          return item.attributes.some((attribute) => {
             return (
-              f.trait_type === attribute.trait_type &&
-              f.value === attribute.value
+              attribute.trait_type === filter.trait_type &&
+              attribute.value === filter.value
             );
           });
         });
-        return matches.length > 0;
+
+        // return matches.length > 0;
       });
-      console.log({ results });
+      // console.log({ results });
       commit("SET_RESULTS", results);
+      dispatch("SET_AVAILABLE_ATTRIBUTES");
     },
 
     // Set the metadata array index of the current selected item

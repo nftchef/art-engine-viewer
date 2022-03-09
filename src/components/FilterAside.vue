@@ -47,16 +47,18 @@ export default {
 
 const filterHandler = (_store) => (e, trait) => {
   const store = _store;
-  console.log("FilterHandler", { trait });
+  console.log("FilterHandler", { checked: e.target.checked, trait });
 
-  if (!trait.filterState) {
+  if (e.target.checked) {
     // add
+    console.log("add filter");
     store.dispatch("ADD_FILTER", {
       trait_type: e.target.dataset.traitType,
       value: e.target.dataset.traitAttribute,
     });
   } else {
     // remove
+    console.log("remove filter");
     store.dispatch("REMOVE_FILTER", {
       trait_type: e.target.dataset.traitType,
       value: e.target.dataset.traitAttribute,

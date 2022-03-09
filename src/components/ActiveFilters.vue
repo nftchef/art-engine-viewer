@@ -38,6 +38,7 @@ const removeFilter = (store) => (filter) => {
 }
 .filter {
   align-items: center;
+  color: var(--dark);
   background: #e9e9e9;
   border-radius: 1rem;
   display: flex;

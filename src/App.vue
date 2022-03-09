@@ -51,6 +51,11 @@ export default {
 </script>
 
 <style lang="scss">
+:root {
+  --dark: #222;
+  --light: #e5e5e5;
+  --white: #fff;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -60,13 +65,14 @@ export default {
 }
 
 .app {
-  --background: white;
+  --background: var(--white);
 
+  min-height: 100vh;
   padding: 2em;
 
   &.darkmode {
-    --background: #222;
-    --color: #e5e5e5;
+    --background: var(--dark);
+    --color: var(--light);
   }
   background: var(--background);
   color: var(--color);

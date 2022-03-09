@@ -211,7 +211,7 @@ const toggleFullscreen = (fullscreenState) => () => {
   top: 0;
   left: 0;
   position: fixed;
-  background: var(--backrgound);
+  background: var(--background);
   opacity: 0.65;
   z-index: 9;
 }

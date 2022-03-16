@@ -1,12 +1,12 @@
 <template>
   <aside class="filters">
     <h1>Filter</h1>
-    <div v-for="type in Object.keys(allTraits)" :key="type">
+    <div v-for="type in Object.keys(allTraits).sort()" :key="type">
       <label for="" class="filter__type">{{ type }}</label>
       <ul class="filter__list">
         <li
           class="filter__attribute"
-          v-for="attribute in Object.keys(allTraits[type])"
+          v-for="attribute in Object.keys(allTraits[type]).sort()"
           :key="attribute"
         >
           <input

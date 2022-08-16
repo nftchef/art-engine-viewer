@@ -61,8 +61,7 @@ Object.keys(allTraits.value).forEach((key) => {
 
 console.log({ collapsed });
 
-const filterHandler = (_store) => (e, trait) => {
-  const store = _store;
+const filterHandler = (e, trait) => {
   console.log("FilterHandler", { checked: e.target.checked, trait });
 
   if (e.target.checked) {

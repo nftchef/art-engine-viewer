@@ -37,17 +37,12 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed } from "@vue/runtime-core";
 import { useStore } from "vuex";
-export default {
-  setup() {
-    const store = useStore();
-    const darkmode = computed(() => store.state.darkmode);
 
-    return { darkmode, store };
-  },
-};
+const store = useStore();
+const darkmode = computed(() => store.state.darkmode);
 </script>
 
 <style lang="scss" scoped>
